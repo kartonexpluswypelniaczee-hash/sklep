@@ -6,7 +6,6 @@
     <title>Złóż Zamówienie - Kartonexplus</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <script async src="https://js.stripe.com/v3/pricing-table.js"></script>
 </head>
 <body>
 
@@ -27,16 +26,12 @@
     <main class="container" style="padding: 60px 20px; max-width: 800px;">
         <div class="box animated" style="opacity: 1; text-align: center;">
             <h2>Bezpieczna Płatność Online</h2>
-            <p style="margin-bottom: 30px; color: #555;">Wybierz interesującą Cię ilość wypełniacza (w kilogramach) bezpośrednio w poniższym formularzu Stripe. System bezpiecznie zrealizuje Twoją płatność kartą lub BLIK-iem.</p>
+            <p style="margin-bottom: 30px; color: #555;">Kliknij w poniższy przycisk, aby przejść do bezpiecznego formularza płatności Stripe. Tam wybierzesz zamawianą ilość kilogramów i zapłacisz wygodnie BLIK-iem lub kartą.</p>
             
-            <div style="display: flex; justify-content: center; margin-bottom: 20px;">
-                <stripe-buy-button
-                    buy-button-id="buy_btn_1"
-                    publishable-key="pk_test_51TmaluAwvCsjVpTSZ7YmH0M9jW0kFv1c9R2x6z8A5B4C3D2E1F0G9H8I7J6K5L4M"
-                    client-reference-id="zamowienie_strona"
-                >
-                </stripe-buy-button>
-            </div>
+            <!-- Twój bezpośredni link do płatności Stripe -->
+            <a href="https://buy.stripe.com/test_aFadR86W14bt7ZA0BPe7m00" class="btn" style="width: 100%; padding: 18px; font-size: 20px; text-decoration: none; display: block; box-sizing: border-box; text-align: center; background-color: var(--primary-green);">
+                🛒 Przejdź do płatności (Karta / BLIK)
+            </a>
 
             <div style="background-color: var(--light-green); padding: 15px; border-radius: 12px; margin-top: 35px; border: 1px solid rgba(76, 175, 80, 0.2); text-align: left;">
                 <div class="price-tag" style="margin: 0; display: block; border: none; background: transparent; padding: 0;">Cena: 3 zł / 1 kg</div>
