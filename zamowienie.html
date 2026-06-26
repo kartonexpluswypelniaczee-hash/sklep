@@ -6,6 +6,8 @@
     <title>Złóż Zamówienie - Kartonexplus</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <!-- Oficjalny skrypt Stripe do obsługi bezpiecznych płatności -->
+    <script src="https://js.stripe.com/v3/"></script>
 </head>
 <body>
 
@@ -25,8 +27,8 @@
 
     <main class="container" style="padding: 60px 20px; max-width: 800px;">
         <div class="box animated" style="opacity: 1;">
-            <h2>Formularz Zamówienia</h2>
-            <p style="margin-bottom: 20px; color: #555;">Wypełnij poniższy formularz, aby zamówić nasz ekologiczny nacinany wypełniacz kartonowy. Po przesłaniu zgłoszenia skontaktujemy się z Tobą mailowo lub telefonicznie w celu potwierdzenia szczegółów i kosztów dostawy.</p>
+            <h2>Bezpieczna Płatność Online</h2>
+            <p style="margin-bottom: 20px; color: #555;">Wybierz interesującą Cię ilość wypełniacza (w kilogramach) bezpośrednio w poniższym formularzu. System Stripe bezpiecznie zrealizuje Twoją płatność kartą lub systemem BLIK, a do nas trafi gotowe zamówienie.</p>
             
             <div style="background-color: var(--light-green); padding: 15px; border-radius: 12px; margin-bottom: 25px; border: 1px solid rgba(76, 175, 80, 0.2);">
                 <div class="price-tag" style="margin: 0; display: block; border: none; background: transparent; padding: 0;">Cena: 3 zł / 1 kg</div>
@@ -36,25 +38,13 @@
                 </div>
             </div>
             
-            <form action="https://formspree.io/f/xpqgpkyn" method="POST">
-                <label style="font-weight: 600; color: var(--dark-green); margin-bottom: 2px;">Dane zamawiającego:</label>
-                <input type="text" name="Firma_lub_Imie" placeholder="Imię i Nazwisko / Nazwa Firmy" required>
-                
-                <label style="font-weight: 600; color: var(--dark-green); margin-bottom: 2px; margin-top: 10px;">Dane kontaktowe:</label>
-                <input type="email" name="Email_klienta" placeholder="Adres E-mail" required>
-                <input type="tel" name="Telefon" placeholder="Numer telefonu" required>
-                
-                <label style="font-weight: 600; color: var(--dark-green); margin-bottom: 2px; margin-top: 10px;">Szczegóły zamówienia:</label>
-                <input type="number" name="Ilosc_kg" placeholder="Ilość wypełniacza w kg (np. 50)" min="1" required>
-                
-                <select name="Forma_platnosci" style="width: 100%; padding: 14px; border: 1px solid #E2E8F0; border-radius: 10px; background-color: #FAFAFA; margin-bottom: 15px; font-family: inherit; font-size: 15px;">
-                    <option value="" disabled selected>Wybierz formę płatności...</option>
-                    <option value="BLIK">Płatność BLIK na telefon</option>
-                    <option value="Przelew">Tradycyjny przelew bankowy</option>
-                </select>
-
-                <button type="submit" class="btn" style="width: 100%; padding: 16px; font-size: 18px; margin-top: 10px;">Potwierdzam i zamawiam</button>
-            </form>
+            <!-- Automatyczny formularz płatności osadzony na stronie -->
+            <div id="checkout">
+                <div id="error-message"></div>
+                <button id="checkout-button" class="btn" style="width: 100%; padding: 18px; font-size: 20px;">
+                    🛒 Przejdź do bezpiecznej płatności (Karta / BLIK)
+                </button>
+            </div>
         </div>
     </main>
 
@@ -65,5 +55,40 @@
             <p>© 2026 Kartonexplus. Wszelkie prawa zastrzeżone.</p>
         </div>
     </footer>
+
+    <script>
+        // Inicjalizacja Stripe przy użyciu Twojego konta
+        // UWAGA: Po wyjściu z trybu testowego zmień ten klucz na swój produkcyjny "pk_live_..."
+        const stripe = Stripe('pk_test_51TmaluAwvCsjVpTSZ7YmH0M9jW0kFv1c9R2x6z8A5B4C3D2E1F0G9H8I7J6K5L4M');
+
+        const checkoutButton = document.getElementById('checkout-button');
+
+        checkoutButton.addEventListener('click', function () {
+            // Przekierowanie do gotowej sesji kasowej Stripe
+            stripe.redirectToCheckout({
+                lineItems: [{
+                    // Twój zidentyfikowany produkt ze Stripe
+                    price: 'prod_Um98xAl6wV858p', 
+                    quantity: 10, // Domyślna startowa ilość (klient może ją zmienić na stronie Stripe)
+                }],
+                mode: 'payment',
+                // Adresy, na które Stripe odeśle klienta po zakończeniu transakcji
+                successUrl: window.location.origin + '/index.html?status=sukces',
+                cancelUrl: window.location.origin + '/zamowienie.html?status=anulowano',
+                // Automatyczne zbieranie adresu do wysyłki i telefonu od klienta w oknie Stripe
+                shippingAddressCollection: {
+                    allowedCountries: ['PL'],
+                },
+            })
+            .then(function (result) {
+                if (result.error) {
+                    var displayError = document.getElementById('error-message');
+                    displayError.textContent = result.error.message;
+                    displayError.style.color = 'red';
+                    displayError.style.marginTop = '10px';
+                }
+            });
+        });
+    </script>
 </body>
 </html>
