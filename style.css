@@ -1,6 +1,4 @@
-/* ==========================================================================
-   BAZOWE STYLE (DLA KOMPUTERÓW)
-   ========================================================================== */
+/* Definicja kolorów zielono-białych jako zmienne systemowe */
 :root {
     --primary-green: #4CAF50;    /* Jasny, żywy zielony do akcentów i przycisków */
     --dark-green: #2E7D32;       /* Ciemny zielony do nagłówków i stopki */
@@ -55,10 +53,10 @@ header {
     position: sticky;
     top: 0;
     z-index: 100;
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); /* Płynne chowanie i wyłanianie */
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Klasa dodawana przez skrypt na dole, która chowa całe menu do góry */
+/* Klasa chująca menu (dodawana przez JavaScript przy skrolowaniu w dół) */
 header.nav-hidden {
     transform: translateY(-100%);
 }
@@ -77,7 +75,7 @@ header.nav-hidden {
     white-space: nowrap;
 }
 
-/* Styl dla nowych przycisków v menu: Dlaczego my i Kontakt */
+/* Styl dla przycisków w menu: Dlaczego my i Kontakt (Zarówno na PC jak i Mobile) */
 .nav-links { 
     display: flex; 
     list-style: none; 
@@ -87,10 +85,10 @@ header.nav-hidden {
 
 .btn-menu {
     display: inline-block;
-    background-color: #e8f5e9;
+    background-color: #e8f5e9; /* Jasnozielone tło */
     color: var(--dark-green) !important;
-    padding: 8px 18px;
-    border-radius: 20px;
+    padding: 12px 24px;
+    border-radius: 30px;
     text-decoration: none;
     font-weight: 600;
     font-size: 15px;
@@ -100,9 +98,11 @@ header.nav-hidden {
 .btn-menu:hover {
     background-color: var(--primary-green);
     color: var(--white) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
 }
 
-/* Profesjonalne przyciski z animacją powiększenia i cieniem */
+/* Profesjonalne przyciski (np. Kup teraz / Złóż zamówienie) */
 .btn {
     background-color: var(--primary-green);
     color: var(--white);
@@ -369,7 +369,7 @@ table, th, td { border: 1px solid #ddd; padding: 15px; text-align: center; }
    WERSJA RESPONSYWNA (STYLE DLA SMARTFONÓW)
    ========================================================================== */
 @media (max-width: 768px) {
-    /* Menu układa się w dwie sekcje: Logo na górze, przyciski na dole */
+    /* Menu na telefonie: Logo na górze, przyciski na dole */
     .nav-content {
         flex-direction: column;
         gap: 12px;
@@ -385,25 +385,25 @@ table, th, td { border: 1px solid #ddd; padding: 15px; text-align: center; }
         width: 100%;
     }
 
-    /* 3 przyciski idealnie obok siebie w jednej linii na smartfonie */
+    /* Wszystkie 3 przyciski idealnie obok siebie na ekranie smartfona */
     .nav-links {
         display: flex;
         flex-direction: row; 
         justify-content: center;
         align-items: center;
-        gap: 8px; 
+        gap: 6px; 
         width: 100%;
     }
 
     .btn-menu {
-        font-size: 12px;
-        padding: 8px 12px;
+        font-size: 11px;
+        padding: 8px 10px;
     }
 
     .nav-content .btn {
-        font-size: 12px;
-        padding: 8px 12px;
-        border-radius: 20px; 
+        font-size: 11px;
+        padding: 8px 10px;
+        border-radius: 30px; 
     }
 
     /* Reszta sekcji mobilnych */
