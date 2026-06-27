@@ -101,5 +101,22 @@
             <p>© 2026 Kartonexplus. Wszelkie prawa zastrzeżone.</p>
         </div>
     </footer>
+    <script>
+let lastScrollTop = 0;
+const headerEl = document.querySelector('header');
+
+window.addEventListener('scroll', function() {
+    let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    
+    if (scrollTop > lastScrollTop && scrollTop > 100) {
+        // Skrolujesz w dół -> schowaj przyciski menu do góry
+        headerEl.classList.add('nav-hidden');
+    } else {
+        // Skrolujesz w górę -> pokaż menu z powrotem
+        headerEl.classList.remove('nav-hidden');
+    }
+    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+}, false);
+</script>
 </body>
 </html>
