@@ -18,8 +18,9 @@
         .qty-wrapper { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 20px; }
         .qty-control-btn {
             background-color: #2e7d32; color: white; border: none; width: 50px; height: 50px;
-            border-radius: 10px; font-size: 24px; font-weight: bold; cursor: pointer;
+            border-radius: 10px; font-size: 24px; font-weight: bold; cursor: pointer; user-select: none;
         }
+        .qty-control-btn:hover { background-color: #1b5e20; }
         .qty-input {
             width: 100px; height: 50px; font-size: 24px; font-family: 'Poppins', sans-serif;
             font-weight: 700; color: #1e293b; text-align: center; border: 2px solid #cbd5e1; border-radius: 10px;
@@ -41,13 +42,13 @@
         <div class="box" style="text-align: center; background: #ffffff; padding: 35px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
             
             <h2>Bezpieczna Płatność Online</h2>
-            <p style="color: #555;">Użyj plusa i minusa, aby wybrać wagę paczki.</p>
+            <p style="color: #555;">Użyj przycisków plus i minus lub wpisz ilość, aby dostosować zamówienie.</p>
             
             <div class="qty-picker-container">
-                <div class="qty-title">Ilość wypełniacza (w kg):</div>
+                <div class="qty-title">Ilość zamówionego wypełniacza (w kg):</div>
                 <div class="qty-wrapper">
                     <button type="button" class="qty-control-btn" onclick="changeQty(-1)">-</button>
-                    <input type="number" id="weight-input" class="qty-input" value="1" min="1" max="10" readonly>
+                    <input type="number" id="weight-input" class="qty-input" value="1" min="1" max="10" oninput="validateAndCalculate()">
                     <button type="button" class="qty-control-btn" onclick="changeQty(1)">+</button>
                 </div>
                 <div class="summary-text">
@@ -65,14 +66,15 @@
     <script>
         const input = document.getElementById('weight-input');
 
+        // TUTAJ SĄ TWOJE LINKI - PODMIEŃ POZOSTAŁE TEKSTY NA PRAWDZIWE LINKI ZE STRIPE
         const stripeLinks = {
-            1: "https://buy.stripe.com/test_cNi28qbch9vNbbM4S5e7m02", // Twój obecny link na 3zł
+            1: "https://buy.stripe.com/test_cNi28qbch9vNbbM4S5e7m02", // Link dla 1 kg (3 zł)
             2: "TUTAJ_LINK_DLA_2KG", 
             3: "TUTAJ_LINK_DLA_3KG",
             4: "TUTAJ_LINK_DLA_4KG",
             5: "TUTAJ_LINK_DLA_5KG",
             6: "TUTAJ_LINK_DLA_6KG",
-            7: "https://buy.stripe.com/test_dRmeVc4NT0Zh5Rs3O1e7m03",
+            7: "https://buy.stripe.com/test_dRmeVc4NT0Zh5Rs3O1e7m03", // TWÓJ AKTUALNY LINK DLA 7 KG (21 zł)
             8: "TUTAJ_LINK_DLA_8KG",
             9: "TUTAJ_LINK_DLA_9KG",
             10: "TUTAJ_LINK_DLA_10KG"
@@ -87,13 +89,23 @@
             }
         }
 
+        function validateAndCalculate() {
+            let currentVal = parseInt(input.value);
+            if (isNaN(currentVal) || currentVal < 1) currentVal = 1;
+            if (currentVal > 10) currentVal = 10;
+            input.value = currentVal;
+            document.getElementById('price-display').innerText = (currentVal * 3) + " zł";
+        }
+
         function redirectToStripe() {
             let qty = input.value;
             let url = stripeLinks[qty];
-            if(url && url !== "TUTAJ_LINK_DLA_2KG") {
+            
+            // Jeśli link zaczyna się od http (czyli go wkleiłeś), przekieruj
+            if(url && url.startsWith("http")) {
                 window.location.href = url;
             } else {
-                alert("Ten krok wymaga wklejenia właściwego linku Stripe dla " + qty + " kg w kodzie strony!");
+                alert("Najpierw musisz dodać w kodzie strony link Stripe dla " + qty + " kg!");
             }
         }
     </script>
