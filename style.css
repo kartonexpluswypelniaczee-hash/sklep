@@ -66,6 +66,31 @@ header {
     font-weight: 700;
     color: var(--dark-green);
     text-decoration: none;
+    white-space: nowrap; /* Blokuje łamanie tekstu logo do nowej linii */
+}
+
+/* Styl dla nowych przycisków w menu: Dlaczego my i Kontakt */
+.nav-links { 
+    display: flex; 
+    list-style: none; 
+    gap: 15px; 
+}
+
+.btn-menu {
+    display: inline-block;
+    background-color: #e8f5e9; /* Bardzo jasne zielone tło pod przyciski menu */
+    color: var(--dark-green) !important;
+    padding: 8px 18px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+    transition: all 0.3s ease;
+}
+
+.btn-menu:hover {
+    background-color: var(--primary-green);
+    color: var(--white) !important;
 }
 
 /* Profesjonalne przyciski z animacją powiększenia i cieniem */
@@ -311,10 +336,6 @@ footer {
     margin-top: 60px;
 }
 
-/* Nawigacja */
-.nav-links { display: flex; list-style: none; gap: 20px; }
-.nav-links a { text-decoration: none; color: var(--text-dark); font-weight: 600; }
-
 /* Sekcje dodatkowe */
 .steps-grid { display: flex; justify-content: space-around; padding: 40px 0; gap: 20px; }
 .step { text-align: center; }
@@ -336,23 +357,33 @@ table, th, td { border: 1px solid #ddd; padding: 15px; text-align: center; }
 }
 
 /* ==========================================================================
-   NOWA SEKCOJA: PEŁNA RESPONSYWNOŚĆ (EKRANY MOBILNE DO 768px I SMARTFONY)
+   WERSJA RESPONSYWNA (STYLE DLA SMARTFONÓW)
    ========================================================================== */
 @media (max-width: 768px) {
-    /* Menu / Nawigacja układa się w pionie bez ucinania przycisku */
+    /* Menu układa się w ładny pionowy stos */
     .nav-content {
         flex-direction: column;
         gap: 15px;
         text-align: center;
+        padding: 10px 0;
+    }
+    
+    .logo {
+        font-size: 19px; /* Zmniejszenie fontu na komórkach, aby zmieścił się w 1 linii */
     }
     
     .nav-links {
         justify-content: center;
         flex-wrap: wrap;
-        gap: 15px;
+        gap: 10px;
     }
 
-    /* Dopasowanie nagłówka Hero na smartfony */
+    .btn-menu {
+        font-size: 13px;
+        padding: 6px 14px;
+    }
+
+    /* Reszta sekcji mobilnych */
     .hero {
         flex-direction: column;
         padding: 40px 0;
@@ -373,16 +404,9 @@ table, th, td { border: 1px solid #ddd; padding: 15px; text-align: center; }
         height: 260px;
     }
 
-    /* Trzy kroki (steps-grid) układają się pionowo na telefonie */
     .steps-grid {
         flex-direction: column;
         gap: 25px;
-    }
-
-    /* Zabezpieczenie tabeli przed rozciąganiem ekranu (dodaje boczny suwak) */
-    .comparison {
-        overflow-x: auto;
-        display: block;
     }
 
     table {
@@ -396,7 +420,6 @@ table, th, td { border: 1px solid #ddd; padding: 15px; text-align: center; }
         font-size: 14px;
     }
 
-    /* Sekcja kontaktu, mapy i formularza boks pod boksem */
     .offer-contact-section {
         grid-template-columns: 1fr;
         gap: 30px;
@@ -415,7 +438,6 @@ table, th, td { border: 1px solid #ddd; padding: 15px; text-align: center; }
         font-size: 28px;
     }
 
-    /* Mniejszy, wygodniejszy przycisk pływający na komórki */
     .float-btn {
         padding: 12px 20px;
         font-size: 14px;
@@ -424,7 +446,6 @@ table, th, td { border: 1px solid #ddd; padding: 15px; text-align: center; }
     }
 }
 
-/* Dodatkowa optymalizacja dla średnich tabletów (do 992px) */
 @media (max-width: 992px) and (min-width: 769px) {
     .hero {
         flex-direction: column;
