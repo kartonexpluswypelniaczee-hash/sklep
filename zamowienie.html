@@ -6,66 +6,6 @@
     <title>Złóż Zamówienie - Kartonexplus</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <style>
-        /* Styl dużego, czytelnego selektora wagi */
-        .calculator-container {
-            background: #f8fafc;
-            border: 2px solid #e2e8f0;
-            border-radius: 16px;
-            padding: 25px;
-            margin: 30px 0;
-        }
-        .calculator-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #475569;
-            margin-bottom: 15px;
-        }
-        .quantity-picker {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-        .qty-btn {
-            background-color: #2e7d32;
-            color: white;
-            border: none;
-            width: 55px;
-            height: 55px;
-            border-radius: 50%;
-            font-size: 26px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 4px 6px rgba(46, 125, 50, 0.2);
-        }
-        .qty-btn:hover {
-            background-color: #1b5e20;
-            transform: translateY(-2px);
-        }
-        .qty-btn:active { transform: translateY(0); }
-        
-        .qty-display {
-            font-size: 32px;
-            font-weight: 700;
-            color: #1e293b;
-            min-width: 120px;
-            text-align: center;
-        }
-        .summary-text {
-            font-size: 22px;
-            font-weight: 600;
-            color: #1e293b;
-            margin-top: 15px;
-        }
-        .summary-text span {
-            color: #2e7d32;
-            font-size: 28px;
-            font-weight: 700;
-        }
-    </style>
 </head>
 <body>
 
@@ -84,31 +24,15 @@
     </header>
 
     <main class="container" style="padding: 60px 20px; max-width: 800px;">
-        <!-- Wszystkie elementy wrzucone poprawnie do jednego kontenera div -->
         <div class="box animated" style="opacity: 1 !important; display: block !important; text-align: center; background: #ffffff !important; padding: 35px !important; border-radius: 15px !important; box-shadow: 0 4px 15px rgba(0,0,0,0.05) !important;">
             
             <h2>Bezpieczna Płatność Online</h2>
-            <p style="margin-bottom: 20px; color: #555;">Ustaw odpowiednią wagę zamówienia za pomocą przycisków plus i minus.</p>
+            <p style="margin-bottom: 30px; color: #555;">Kliknij w poniższy przycisk, aby przejść do bezpiecznego formularza płatności Stripe. Tam wybierzesz zamawianą ilość kilogramów i zapłacisz wygodnie BLIK-iem lub kartą.</p>
             
-            <!-- SELEKTOR WAGI KG -->
-            <div class="calculator-container">
-                <div class="calculator-title">Ilość zamówionego wypełniacza:</div>
-                <div class="quantity-picker">
-                    <button type="button" class="qty-btn" onclick="updateWeight(-5)">-</button>
-                    <div id="weight-value" class="qty-display">10 kg</div>
-                    <button type="button" class="qty-btn" onclick="updateWeight(5)">+</button>
-                </div>
-                <div class="summary-text">
-                    Razem do zapłaty: <span id="price-value">30 zł</span>
-                </div>
-            </div>
-            
-            <!-- PRZYCISK PŁATNOŚCI STRIPE -->
-            <a id="dynamic-stripe-btn" href="https://buy.stripe.com/test_cNi28qbch9vNbbM4S5e7m02?quantity=10" style="display: block !important; width: 100% !important; padding: 18px 0 !important; font-size: 20px !important; font-family: 'Poppins', sans-serif !important; font-weight: 600 !important; text-decoration: none !important; text-align: center !important; background-color: #2e7d32 !important; color: #ffffff !important; border-radius: 8px !important; box-sizing: border-box !important; margin: 25px 0 !important; border: none !important; cursor: pointer !important; transition: background 0.3s !important;">
-                🛒 Przejdź do bezpiecznej płatności
+            <a href="https://buy.stripe.com/test_cNi28qbch9vNbbM4S5e7m02" style="display: block !important; width: 100% !important; padding: 18px 0 !important; font-size: 20px !important; font-family: 'Poppins', sans-serif !important; font-weight: 600 !important; text-decoration: none !important; text-align: center !important; background-color: #2e7d32 !important; color: #ffffff !important; border-radius: 8px !important; box-sizing: border-box !important; margin: 25px 0 !important; border: none !important; cursor: pointer !important; transition: background 0.3s !important;">
+                🛒 Przejdź do płatności (Karta / BLIK)
             </a>
 
-            <!-- PANEL INFORMACYJNY -->
             <div style="background-color: #f1f8e9 !important; padding: 15px !important; border-radius: 12px !important; margin-top: 35px !important; border: 1px solid rgba(76, 175, 80, 0.2) !important; text-align: left !important;">
                 <div class="price-tag" style="margin: 0 !important; display: block !important; border: none !important; background: transparent !important; padding: 0 !important; font-weight: bold !important; font-size: 24px !important; color: #2e7d32 !important;">Cena: 3 zł / 1 kg</div>
                 <div style="margin-top: 10px !important; font-size: 14px !important; color: #666 !important; line-height: 1.6 !important;">
@@ -127,28 +51,6 @@
             <p>© 2026 Kartonexplus. Wszelkie prawa zastrzeżone.</p>
         </div>
     </footer>
-
-    <!-- SKRYPT DO DYNAMICZNEGO ZMIENIANIA PARAMETRU ILOŚCI W LINKU STRIPE -->
-    <script>
-        let currentWeight = 10; // Początkowa waga (10 kg)
-        const pricePerKg = 3;   // Cena za 1 kg
-        const baseStripeUrl = "https://buy.stripe.com/test_cNi28qbch9vNbbM4S5e7m02";
-
-        function updateWeight(amount) {
-            let newWeight = currentWeight + amount;
-            
-            // Limit zamówienia od 5 kg do 100 kg
-            if (newWeight >= 5 && newWeight <= 100) {
-                currentWeight = newWeight;
-                
-                document.getElementById('weight-value').innerText = currentWeight + " kg";
-                document.getElementById('price-value').innerText = (currentWeight * pricePerKg) + " zł";
-                
-                // Automatycznie dokleja ?quantity=X na końcu linku Stripe
-                document.getElementById('dynamic-stripe-btn').href = baseStripeUrl + "?quantity=" + currentWeight;
-            }
-        }
-    </script>
 
 </body>
 </html>
