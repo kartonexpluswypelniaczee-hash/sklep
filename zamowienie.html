@@ -6,6 +6,52 @@
     <title>Złóż Zamówienie - Kartonexplus</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Styl sekcji wyboru wagi */
+        .select-container {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 25px 0;
+            text-align: left;
+        }
+        .select-label {
+            font-size: 16px;
+            font-weight: 600;
+            color: #475569;
+            display: block;
+            margin-bottom: 8px;
+        }
+        .weight-dropdown {
+            width: 100%;
+            padding: 12px;
+            font-size: 18px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            color: #1e293b;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
+            background-color: #ffffff;
+            cursor: pointer;
+            outline: none;
+            box-sizing: border-box;
+        }
+        .weight-dropdown:focus {
+            border-color: #2e7d32;
+        }
+        .live-price {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-top: 15px;
+            text-align: center;
+        }
+        .live-price span {
+            color: #2e7d32;
+            font-size: 24px;
+        }
+    </style>
 </head>
 <body>
 
@@ -27,9 +73,29 @@
         <div class="box animated" style="opacity: 1 !important; display: block !important; text-align: center; background: #ffffff !important; padding: 35px !important; border-radius: 15px !important; box-shadow: 0 4px 15px rgba(0,0,0,0.05) !important;">
             
             <h2>Bezpieczna Płatność Online</h2>
-            <p style="margin-bottom: 30px; color: #555;">Kliknij w poniższy przycisk, aby przejść do bezpiecznego formularza płatności Stripe. Tam wybierzesz zamawianą ilość kilogramów i zapłacisz wygodnie BLIK-iem lub kartą.</p>
+            <p style="margin-bottom: 15px; color: #555;">Wybierz z listy ile kilogramów wypełniacza chcesz zamówić, a następnie przejdź do płatności.</p>
             
-            <a href="https://buy.stripe.com/test_cNi28qbch9vNbbM4S5e7m02" style="display: block !important; width: 100% !important; padding: 18px 0 !important; font-size: 20px !important; font-family: 'Poppins', sans-serif !important; font-weight: 600 !important; text-decoration: none !important; text-align: center !important; background-color: #2e7d32 !important; color: #ffffff !important; border-radius: 8px !important; box-sizing: border-box !important; margin: 25px 0 !important; border: none !important; cursor: pointer !important; transition: background 0.3s !important;">
+            <div class="select-container">
+                <label for="weight-select" class="select-label">Wybierz wagę zamówienia:</label>
+                <select id="weight-select" class="weight-dropdown" onchange="calculatePrice()">
+                    <option value="1">1 kg — 3 zł</option>
+                    <option value="2">2 kg — 6 zł</option>
+                    <option value="3">3 kg — 9 zł</option>
+                    <option value="4">4 kg — 12 zł</option>
+                    <option value="5" selected>5 kg — 15 zł (Domyślnie)</option>
+                    <option value="6">6 kg — 18 zł</option>
+                    <option value="7">7 kg — 21 zł</option>
+                    <option value="8">8 kg — 24 zł</option>
+                    <option value="9">9 kg — 27 zł</option>
+                    <option value="10">10 kg — 30 zł</option>
+                </select>
+                
+                <div class="live-price">
+                    Razem do zapłaty: <span id="total-price-display">15 zł</span>
+                </div>
+            </div>
+            
+            <a id="stripe-checkout-btn" href="https://buy.stripe.com/test_cNi28qbch9vNbbM4S5e7m02?quantity=5" style="display: block !important; width: 100% !important; padding: 18px 0 !important; font-size: 20px !important; font-family: 'Poppins', sans-serif !important; font-weight: 600 !important; text-decoration: none !important; text-align: center !important; background-color: #2e7d32 !important; color: #ffffff !important; border-radius: 8px !important; box-sizing: border-box !important; margin: 25px 0 !important; border: none !important; cursor: pointer !important; transition: background 0.3s !important;">
                 🛒 Przejdź do płatności (Karta / BLIK)
             </a>
 
@@ -51,6 +117,21 @@
             <p>© 2026 Kartonexplus. Wszelkie prawa zastrzeżone.</p>
         </div>
     </footer>
+
+    <script>
+        function calculatePrice() {
+            const select = document.getElementById('weight-select');
+            const selectedWeight = parseInt(select.value);
+            const pricePerKg = 3;
+            const baseStripeUrl = "https://buy.stripe.com/test_cNi28qbch9vNbbM4S5e7m02";
+
+            // Aktualizacja tekstu ceny na stronie
+            document.getElementById('total-price-display').innerText = (selectedWeight * pricePerKg) + " zł";
+
+            // Podmiana końcówki linku dla przycisku Stripe
+            document.getElementById('stripe-checkout-btn').href = baseStripeUrl + "?quantity=" + selectedWeight;
+        }
+    </script>
 
 </body>
 </html>
