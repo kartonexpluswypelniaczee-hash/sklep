@@ -7,48 +7,78 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        .select-container {
+        /* Styl nowoczesnego selektora z przyciskami i polem wpisywania */
+        .qty-picker-container {
             background: #f8fafc;
             border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 20px;
-            margin: 25px 0;
-            text-align: left;
+            border-radius: 16px;
+            padding: 25px;
+            margin: 30px 0;
         }
-        .select-label {
-            font-size: 16px;
+        .qty-title {
+            font-size: 18px;
             font-weight: 600;
             color: #475569;
-            display: block;
-            margin-bottom: 8px;
+            margin-bottom: 15px;
         }
-        .weight-dropdown {
-            width: 100%;
-            padding: 12px;
-            font-size: 18px;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            color: #1e293b;
-            border: 2px solid #cbd5e1;
-            border-radius: 8px;
-            background-color: #ffffff;
+        .qty-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .qty-control-btn {
+            background-color: #2e7d32;
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            font-size: 24px;
+            font-weight: bold;
             cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+        }
+        .qty-control-btn:hover {
+            background-color: #1b5e20;
+        }
+        .qty-input {
+            width: 100px;
+            height: 50px;
+            font-size: 24px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            color: #1e293b;
+            text-align: center;
+            border: 2px solid #cbd5e1;
+            border-radius: 10px;
             outline: none;
             box-sizing: border-box;
         }
-        .weight-dropdown:focus {
+        .qty-input:focus {
             border-color: #2e7d32;
         }
-        .live-price {
-            font-size: 20px;
-            font-weight: 700;
+        /* Ukrywanie strzałek w polu numerycznym */
+        .qty-input::-webkit-outer-spin-button,
+        .qty-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .qty-input[type=number] {
+            -moz-appearance: textfield;
+        }
+        .summary-text {
+            font-size: 22px;
+            font-weight: 600;
             color: #1e293b;
             margin-top: 15px;
-            text-align: center;
         }
-        .live-price span {
+        .summary-text span {
             color: #2e7d32;
-            font-size: 24px;
+            font-size: 28px;
+            font-weight: 700;
         }
     </style>
 </head>
@@ -72,31 +102,23 @@
         <div class="box animated" style="opacity: 1 !important; display: block !important; text-align: center; background: #ffffff !important; padding: 35px !important; border-radius: 15px !important; box-shadow: 0 4px 15px rgba(0,0,0,0.05) !important;">
             
             <h2>Bezpieczna Płatność Online</h2>
-            <p style="margin-bottom: 15px; color: #555;">Wybierz z listy ile kilogramów wypełniacza chcesz zamówić, a następnie przejdź do płatności.</p>
+            <p style="margin-bottom: 20px; color: #555;">Wpisz liczbę kilogramów lub użyj przycisków plus i minus, aby dostosować zamówienie.</p>
             
-            <!-- ROZWIJANA LISTA OD 1 DO 10 KG -->
-            <div class="select-container">
-                <label for="weight-select" class="select-label">Wybierz wagę zamówienia:</label>
-                <select id="weight-select" class="weight-dropdown" onchange="calculatePrice()">
-                    <option value="1">1 kg — 3 zł</option>
-                    <option value="2">2 kg — 6 zł</option>
-                    <option value="3">3 kg — 9 zł</option>
-                    <option value="4">4 kg — 12 zł</option>
-                    <option value="5" selected>5 kg — 15 zł (Domyślnie)</option>
-                    <option value="6">6 kg — 18 zł</option>
-                    <option value="7">7 kg — 21 zł</option>
-                    <option value="8">8 kg — 24 zł</option>
-                    <option value="9">9 kg — 27 zł</option>
-                    <option value="10">10 kg — 30 zł</option>
-                </select>
-                
-                <div class="live-price">
-                    Razem do zapłaty: <span id="total-price-display">15 zł</span>
+            <!-- SELEKTOR ILOŚCI Z PRZYCISKAMI I POLEM TEKSTOWYM -->
+            <div class="qty-picker-container">
+                <div class="qty-title">Ilość zamówionego wypełniacza (w kg):</div>
+                <div class="qty-wrapper">
+                    <button type="button" class="qty-control-btn" onclick="changeQty(-1)">-</button>
+                    <input type="number" id="weight-input" class="qty-input" value="1" min="1" max="500" oninput="validateAndCalculate()">
+                    <button type="button" class="qty-control-btn" onclick="changeQty(1)">+</button>
+                </div>
+                <div class="summary-text">
+                    Razem do zapłaty: <span id="price-display">3 zł</span>
                 </div>
             </div>
             
             <!-- PRZYCISK PŁATNOŚCI STRIPE -->
-            <a id="stripe-checkout-btn" href="https://buy.stripe.com/test_cNi28qbch9vNbbM4S5e7m02?quantity=5" style="display: block !important; width: 100% !important; padding: 18px 0 !important; font-size: 20px !important; font-family: 'Poppins', sans-serif !important; font-weight: 600 !important; text-decoration: none !important; text-align: center !important; background-color: #2e7d32 !important; color: #ffffff !important; border-radius: 8px !important; box-sizing: border-box !important; margin: 25px 0 !important; border: none !important; cursor: pointer !important; transition: background 0.3s !important;">
+            <a id="stripe-checkout-btn" href="https://buy.stripe.com/test_cNi28qbch9vNbbM4S5e7m02?quantity=1" style="display: block !important; width: 100% !important; padding: 18px 0 !important; font-size: 20px !important; font-family: 'Poppins', sans-serif !important; font-weight: 600 !important; text-decoration: none !important; text-align: center !important; background-color: #2e7d32 !important; color: #ffffff !important; border-radius: 8px !important; box-sizing: border-box !important; margin: 25px 0 !important; border: none !important; cursor: pointer !important; transition: background 0.3s !important;">
                 🛒 Przejdź do płatności (Karta / BLIK)
             </a>
 
@@ -120,15 +142,40 @@
         </div>
     </footer>
 
+    <!-- SKRYPT OBSŁUGUJĄCY WPISYWANIE ORAZ PRZYCISKI KLIKANE -->
     <script>
-        function calculatePrice() {
-            const select = document.getElementById('weight-select');
-            const selectedWeight = parseInt(select.value);
-            const pricePerKg = 3;
-            const baseStripeUrl = "https://buy.stripe.com/test_cNi28qbch9vNbbM4S5e7m02";
+        const pricePerKg = 3;
+        const baseStripeUrl = "https://buy.stripe.com/test_cNi28qbch9vNbbM4S5e7m02";
+        const input = document.getElementById('weight-input');
 
-            document.getElementById('total-price-display').innerText = (selectedWeight * pricePerKg) + " zł";
-            document.getElementById('stripe-checkout-btn').href = baseStripeUrl + "?quantity=" + selectedWeight;
+        // Funkcja dla przycisków + i -
+        function changeQty(amount) {
+            let currentVal = parseInt(input.value) || 0;
+            let newVal = currentVal + amount;
+            
+            if (newVal >= 1) {
+                input.value = newVal;
+                updatePageAndLink(newVal);
+            }
+        }
+
+        // Funkcja wywoływana przy ręcznym wpisywaniu z klawiatury
+        function validateAndCalculate() {
+            let currentVal = parseInt(input.value);
+            
+            // Jeśli użytkownik skasuje wszystko, domyślnie liczymy jako 1 (żeby nie było błędu)
+            if (isNaN(currentVal) || currentVal < 1) {
+                updatePageAndLink(1);
+                return;
+            }
+            
+            updatePageAndLink(currentVal);
+        }
+
+        // Wspólna funkcja aktualizująca widok ceny oraz adres przycisku Stripe
+        function updatePageAndLink(quantity) {
+            document.getElementById('price-display').innerText = (quantity * pricePerKg) + " zł";
+            document.getElementById('stripe-checkout-btn').href = baseStripeUrl + "?quantity=" + quantity;
         }
     </script>
 
