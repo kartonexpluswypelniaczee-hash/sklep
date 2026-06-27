@@ -114,6 +114,7 @@
                 </div>
             </div>
             
+            <!-- PRZYCISK Z TWOIM DZIAŁAJĄCYM LINKIEM -->
             <a id="stripe-checkout-btn" href="https://buy.stripe.com/test_cNi28qbch9vNbbM4S5e7m02?quantity=1" style="display: block !important; width: 100% !important; padding: 18px 0 !important; font-size: 20px !important; font-family: 'Poppins', sans-serif !important; font-weight: 600 !important; text-decoration: none !important; text-align: center !important; background-color: #2e7d32 !important; color: #ffffff !important; border-radius: 8px !important; box-sizing: border-box !important; margin: 25px 0 !important; border: none !important; cursor: pointer !important; transition: background 0.3s !important;">
                 🛒 Przejdź do płatności (Karta / BLIK)
             </a>
@@ -139,7 +140,6 @@
 
     <script>
         const pricePerKg = 3;
-        // TWÓJ JEDYNY, DZIAŁAJĄCY LINK STRIPE
         const baseStripeUrl = "https://buy.stripe.com/test_cNi28qbch9vNbbM4S5e7m02";
         const input = document.getElementById('weight-input');
 
@@ -165,9 +165,7 @@
         }
 
         function updatePageAndLink(quantity) {
-            // Aktualizuje cenę tekstową na stronie
             document.getElementById('price-display').innerText = (quantity * pricePerKg) + " zł";
-            // Dokleja bezpiecznie ?quantity=X do Twojego JEDYNEGO linku
             document.getElementById('stripe-checkout-btn').href = baseStripeUrl + "?quantity=" + quantity;
         }
     </script>
