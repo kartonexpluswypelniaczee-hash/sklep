@@ -66,19 +66,18 @@
     <script>
         const input = document.getElementById('weight-input');
 
-        // TUTAJ SĄ TWOJE LINKI - PODMIEŃ POZOSTAŁE TEKSTY NA PRAWDZIWE LINKI ZE STRIPE
         const stripeLinks = {
-    1: "https://buy.stripe.com/test_cNi28qbch9vNbbM4S5e7m02", // Link dla 1 kg (3 zł)
-    2: "TUTAJ_LINK_DLA_2KG", 
-    3: "TUTAJ_LINK_DLA_3KG",
-    4: "TUTAJ_LINK_DLA_4KG",
-    5: "TUTAJ_LINK_DLA_5KG",
-    6: "TUTAJ_LINK_DLA_6KG",
-    7: "https://buy.stripe.com/test_dRmeVc4NT0Zh5Rs3O1e7m03?quantity=7", // DODANE ?quantity=7 NA KOŃCU
-    8: "TUTAJ_LINK_DLA_8KG",
-    9: "TUTAJ_LINK_DLA_9KG",
-    10: "TUTAJ_LINK_DLA_10KG"
-};
+            1: "https://buy.stripe.com/test_cNi28qbch9vNbbM4S5e7m02", 
+            2: "TUTAJ_LINK_DLA_2KG", 
+            3: "TUTAJ_LINK_DLA_3KG",
+            4: "TUTAJ_LINK_DLA_4KG",
+            5: "TUTAJ_LINK_DLA_5KG",
+            6: "TUTAJ_LINK_DLA_6KG",
+            7: "https://buy.stripe.com/test_dRmeVc4NT0Zh5Rs3O1e7m03?quantity=7", 
+            8: "TUTAJ_LINK_DLA_8KG",
+            9: "TUTAJ_LINK_DLA_9KG",
+            10: "TUTAJ_LINK_DLA_10KG"
+        };
 
         function changeQty(amount) {
             let currentVal = parseInt(input.value) || 1;
@@ -100,14 +99,28 @@
         function redirectToStripe() {
             let qty = input.value;
             let url = stripeLinks[qty];
-            
-            // Jeśli link zaczyna się od http (czyli go wkleiłeś), przekieruj
             if(url && url.startsWith("http")) {
                 window.location.href = url;
             } else {
                 alert("Najpierw musisz dodać w kodzie strony link Stripe dla " + qty + " kg!");
             }
         }
+    </script>
+
+    <script>
+    let lastScrollTop = 0;
+    const headerEl = document.querySelector('header');
+
+    window.addEventListener('scroll', function() {
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        if (scrollTop > lastScrollTop && scrollTop > 100) {
+            headerEl.classList.add('nav-hidden');
+        } else {
+            headerEl.classList.remove('nav-hidden');
+        }
+        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+    }, false);
     </script>
 </body>
 </html>
