@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Styl nowoczesnego selektora z przyciskami i polem wpisywania */
         .qty-picker-container {
             background: #f8fafc;
             border: 2px solid #e2e8f0;
@@ -60,7 +59,6 @@
         .qty-input:focus {
             border-color: #2e7d32;
         }
-        /* Ukrywanie strzałek w polu numerycznym */
         .qty-input::-webkit-outer-spin-button,
         .qty-input::-webkit-inner-spin-button {
             -webkit-appearance: none;
@@ -108,7 +106,8 @@
                 <div class="qty-title">Ilość zamówionego wypełniacza (w kg):</div>
                 <div class="qty-wrapper">
                     <button type="button" class="qty-control-btn" onclick="changeQty(-1)">-</button>
-                    <input type="number" id="weight-input" class="qty-input" value="1" min="1" max="500" oninput="validateAndCalculate()">
+                    <!-- Ograniczamy wpisywanie max do 10 -->
+                    <input type="number" id="weight-input" class="qty-input" value="1" min="1" max="10" oninput="validateAndCalculate()">
                     <button type="button" class="qty-control-btn" onclick="changeQty(1)">+</button>
                 </div>
                 <div class="summary-text">
@@ -116,12 +115,11 @@
                 </div>
             </div>
             
-            <!-- PRZYCISK PŁATNOŚCI STRIPE -->
-            <a id="stripe-checkout-btn" href="https://buy.stripe.com/test_cNi28qbch9vNbbM4S5e7m02?quantity=1" style="display: block !important; width: 100% !important; padding: 18px 0 !important; font-size: 20px !important; font-family: 'Poppins', sans-serif !important; font-weight: 600 !important; text-decoration: none !important; text-align: center !important; background-color: #2e7d32 !important; color: #ffffff !important; border-radius: 8px !important; box-sizing: border-box !important; margin: 25px 0 !important; border: none !important; cursor: pointer !important; transition: background 0.3s !important;">
+            <!-- PRZYCISK URUCHAMIAJĄCY FUNKCJĘ PRZEKIEROWANIA -->
+            <button type="button" onclick="redirectToStripe()" style="display: block !important; width: 100% !important; padding: 18px 0 !important; font-size: 20px !important; font-family: 'Poppins', sans-serif !important; font-weight: 600 !important; text-decoration: none !important; text-align: center !important; background-color: #2e7d32 !important; color: #ffffff !important; border-radius: 8px !important; box-sizing: border-box !important; margin: 25px 0 !important; border: none !important; cursor: pointer !important; transition: background 0.3s !important;">
                 🛒 Przejdź do płatności (Karta / BLIK)
-            </a>
+            </button>
 
-            <!-- PANEL INFORMACYJNY -->
             <div style="background-color: #f1f8e9 !important; padding: 15px !important; border-radius: 12px !important; margin-top: 35px !important; border: 1px solid rgba(76, 175, 80, 0.2) !important; text-align: left !important;">
                 <div class="price-tag" style="margin: 0 !important; display: block !important; border: none !important; background: transparent !important; padding: 0 !important; font-weight: bold !important; font-size: 24px !important; color: #2e7d32 !important;">Cena: 3 zł / 1 kg</div>
                 <div style="margin-top: 10px !important; font-size: 14px !important; color: #666 !important; line-height: 1.6 !important;">
@@ -141,40 +139,52 @@
         </div>
     </footer>
 
-    <!-- SKRYPT OBSŁUGUJĄCY WPISYWANIE ORAZ PRZYCISKI KLIKANE -->
     <script>
         const pricePerKg = 3;
-        const baseStripeUrl = "https://buy.stripe.com/test_cNi28qbch9vNbbM4S5e7m02";
         const input = document.getElementById('weight-input');
 
-        // Funkcja dla przycisków + i -
+        // TUTAJ WKLEJ SWOJE LINKI ZE STRIPE DLA KAŻDEJ WAGI:
+        const stripeLinks = {
+            1: "https://buy.stripe.com/test_cNi28qbch9vNbbM4S5e7m02", // Link dla 1 kg (3 zł)
+            2: "https://buy.stripe.com/test_KLONKRETNY_LINK_2",      // Link dla 2 kg (6 zł)
+            3: "https://buy.stripe.com/test_KLONKRETNY_LINK_3",      // Link dla 3 kg (9 zł)
+            4: "https://buy.stripe.com/test_KLONKRETNY_LINK_4",      // Link dla 4 kg (12 zł)
+            5: "https://buy.stripe.com/test_KLONKRETNY_LINK_5",      // Link dla 5 kg (15 zł)
+            6: "https://buy.stripe.com/test_KLONKRETNY_LINK_6",      // Link dla 6 kg (18 zł)
+            7: "https://buy.stripe.com/test_KLONKRETNY_LINK_7",      // Link dla 7 kg (21 zł)
+            8: "https://buy.stripe.com/test_KLONKRETNY_LINK_8",      // Link dla 8 kg (24 zł)
+            9: "https://buy.stripe.com/test_KLONKRETNY_LINK_9",      // Link dla 9 kg (27 zł)
+            10: "https://buy.stripe.com/test_KLONKRETNY_LINK_10"     // Link dla 10 kg (30 zł)
+        };
+
         function changeQty(amount) {
             let currentVal = parseInt(input.value) || 0;
             let newVal = currentVal + amount;
-            
-            if (newVal >= 1) {
+            if (newVal >= 1 && newVal <= 10) {
                 input.value = newVal;
-                updatePageAndLink(newVal);
+                document.getElementById('price-display').innerText = (newVal * pricePerKg) + " zł";
             }
         }
 
-        // Funkcja wywoływana przy ręcznym wpisywaniu z klawiatury
         function validateAndCalculate() {
             let currentVal = parseInt(input.value);
-            
-            // Jeśli użytkownik skasuje wszystko, domyślnie liczymy jako 1 (żeby nie było błędu)
-            if (isNaN(currentVal) || currentVal < 1) {
-                updatePageAndLink(1);
-                return;
-            }
-            
-            updatePageAndLink(currentVal);
+            if (isNaN(currentVal) || currentVal < 1) currentVal = 1;
+            if (currentVal > 10) currentVal = 10;
+            input.value = currentVal;
+            document.getElementById('price-display').innerText = (currentVal * pricePerKg) + " zł";
         }
 
-        // Wspólna funkcja aktualizująca widok ceny oraz adres przycisku Stripe
-        function updatePageAndLink(quantity) {
-            document.getElementById('price-display').innerText = (quantity * pricePerKg) + " zł";
-            document.getElementById('stripe-checkout-btn').href = baseStripeUrl + "?quantity=" + quantity;
+        // Funkcja przenosząca na odpowiedni link Stripe
+        function redirectToStripe() {
+            let currentQty = parseInt(input.value) || 1;
+            let targetUrl = stripeLinks[currentQty];
+            
+            if (targetUrl) {
+                window.location.href = targetUrl;
+            } else {
+                // Jeśli coś pójdzie nie tak, idzie do domyślnego linku (1 kg)
+                window.location.href = stripeLinks[1];
+            }
         }
     </script>
 
