@@ -311,30 +311,12 @@ footer {
     margin-top: 60px;
 }
 
-/* Pelna RWD - świetny wygląd na telefonach komórkowych */
-@media (max-width: 992px) {
-    .hero {
-        flex-direction: column;
-        padding: 40px 0;
-        text-align: center;
-    }
-    .hero-image img {
-        height: 300px;
-    }
-    .offer-contact-section {
-        grid-template-columns: 1fr;
-        gap: 30px;
-    }
-    .hero-text h1 {
-        font-size: 36px;
-    }
-}
 /* Nawigacja */
 .nav-links { display: flex; list-style: none; gap: 20px; }
 .nav-links a { text-decoration: none; color: var(--text-dark); font-weight: 600; }
 
 /* Sekcje dodatkowe */
-.steps-grid { display: flex; justify-content: space-around; padding: 40px 0; }
+.steps-grid { display: flex; justify-content: space-around; padding: 40px 0; gap: 20px; }
 .step { text-align: center; }
 .step span { display: block; font-size: 30px; color: var(--primary-green); font-weight: 700; }
 
@@ -351,4 +333,112 @@ table, th, td { border: 1px solid #ddd; padding: 15px; text-align: center; }
     padding: 15px 25px; border-radius: 50px;
     text-decoration: none; font-weight: bold;
     box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 999;
+}
+
+/* ==========================================================================
+   NOWA SEKCOJA: PEŁNA RESPONSYWNOŚĆ (EKRANY MOBILNE DO 768px I SMARTFONY)
+   ========================================================================== */
+@media (max-width: 768px) {
+    /* Menu / Nawigacja układa się w pionie bez ucinania przycisku */
+    .nav-content {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    
+    .nav-links {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    /* Dopasowanie nagłówka Hero na smartfony */
+    .hero {
+        flex-direction: column;
+        padding: 40px 0;
+        text-align: center;
+        gap: 30px;
+    }
+
+    .hero-text h1 {
+        font-size: 30px;
+    }
+
+    .hero-text p {
+        font-size: 16px;
+        margin-bottom: 25px;
+    }
+
+    .hero-image img {
+        height: 260px;
+    }
+
+    /* Trzy kroki (steps-grid) układają się pionowo na telefonie */
+    .steps-grid {
+        flex-direction: column;
+        gap: 25px;
+    }
+
+    /* Zabezpieczenie tabeli przed rozciąganiem ekranu (dodaje boczny suwak) */
+    .comparison {
+        overflow-x: auto;
+        display: block;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    th, td {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    /* Sekcja kontaktu, mapy i formularza boks pod boksem */
+    .offer-contact-section {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        padding: 40px 0;
+    }
+
+    .box {
+        padding: 25px 20px;
+    }
+
+    .box h2 {
+        font-size: 22px;
+    }
+
+    .price-tag {
+        font-size: 28px;
+    }
+
+    /* Mniejszy, wygodniejszy przycisk pływający na komórki */
+    .float-btn {
+        padding: 12px 20px;
+        font-size: 14px;
+        bottom: 20px;
+        right: 20px;
+    }
+}
+
+/* Dodatkowa optymalizacja dla średnich tabletów (do 992px) */
+@media (max-width: 992px) and (min-width: 769px) {
+    .hero {
+        flex-direction: column;
+        padding: 40px 0;
+        text-align: center;
+    }
+    .hero-image img {
+        height: 350px;
+    }
+    .offer-contact-section {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    .hero-text h1 {
+        font-size: 38px;
+    }
 }
